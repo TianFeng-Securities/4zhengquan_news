@@ -38,16 +38,8 @@ for index, url in enumerate(urls):
                 else:
                     news_contents.append(news[news.index(new) + i])
     # 定义时间列表
-    date = [
-        datetime.datetime.strptime(
-            dates[index].replace(
-                "(",
-                "").replace(
-                ")",
-                ""),
-            '%Y-%m-%d %H:%M:%S').date()] * len(news_titles)
-    df_temp = pd.DataFrame(
-        {'时间': date, '报刊': final_paper, '标题': news_titles, '新闻内容': news_contents})
+    date = [datetime.datetime.strptime(dates[index].replace("(","").replace(")",""),'%Y-%m-%d %H:%M:%S').date()] * len(news_titles)
+    df_temp = pd.DataFrame({'时间': date, '报刊': final_paper, '标题': news_titles, '新闻内容': news_contents})
     df = df.append(df_temp)
 df=df.sort_values(by='时间')  # 按照时间先后排序
 df.to_excel(r"四大证券报.xlsx", encoding='gb2312', index=0)  # 输出到excel
