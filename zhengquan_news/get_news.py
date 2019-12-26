@@ -2,7 +2,6 @@
 import pandas as pd
 import requests,sys,datetime
 from lxml import etree
-
 # 发请求
 day_sum_url = "http://finance.sina.com.cn/focus/zqbjh/"  # 总览页的地址
 headers = {
@@ -16,8 +15,6 @@ titles = html.xpath("//div/ul[@class=\"list_009\"]/li/a/text()")  # 解析标题
 dates = html.xpath("//div/ul[@class=\"list_009\"]/li/span/text()")  # 解析发布日期
 df = pd.DataFrame(columns=["时间", "报刊", "标题", "新闻内容"])
 # 对网址循环发请求，返回网址内容
-
-
 for index, url in enumerate(urls):
     sys.stdout.flush()
     sys.stdout.write(f"\r第{index+1}/{len(urls)}次请求")
@@ -40,7 +37,6 @@ for index, url in enumerate(urls):
                     news_titles.append(news[news.index(new) + i])
                 else:
                     news_contents.append(news[news.index(new) + i])
-
     # 定义时间列表
     date = [
         datetime.datetime.strptime(
@@ -53,9 +49,6 @@ for index, url in enumerate(urls):
     df_temp = pd.DataFrame(
         {'时间': date, '报刊': final_paper, '标题': news_titles, '新闻内容': news_contents})
     df = df.append(df_temp)
-
-
 df=df.sort_values(by='时间')  # 按照时间先后排序
 df.to_excel(r"四大证券报.xlsx", encoding='gb2312', index=0)  # 输出到excel
-
 print("\n运行结束")
